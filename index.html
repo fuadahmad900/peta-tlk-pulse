@@ -678,6 +678,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   --bg: #0b161b;
   --panel: #0a1925;
   --panel-a: rgba(10, 25, 37, 0.96);
+  --glass: rgba(10, 25, 37, 0.8);
   --line: rgba(255, 255, 255, 0.16);
   --fg: #e8f1f6;
   --muted: #9fb6c4;
@@ -743,8 +744,13 @@ a { text-decoration: none; }
 .btn[aria-pressed="true"] { background: rgba(47, 155, 255, 0.3); border-color: #ffffff; }
 
 /* Penapis */
-.filters { position: absolute; z-index: 999; top: var(--topH); bottom: 0; left: 0; width: min(340px, 90%); overflow-y: auto; padding: 18px 20px 20px var(--gl); background: var(--panel-a); border-right: 1px solid var(--line); transform: translateX(-100%); transition: transform 0.25s ease; visibility: hidden; }
-.filters.open { transform: none; visibility: visible; }
+.filters { position: absolute; z-index: 1002; top: calc(var(--topH) + 6px); right: var(--gr); width: min(340px, calc(100% - var(--gl) - var(--gr))); max-height: calc(100% - var(--topH) - 24px); overflow-y: auto; padding: 14px 18px 18px; background: rgba(10, 25, 37, 0.97); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45); display: none; }
+.filters.open { display: block; }
+.fc { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-size: 13px; font-weight: 600; }
+.fc[hidden] { display: none; }
+.btn .chev { transition: transform 0.15s ease; }
+.btn[aria-expanded="true"] { background: rgba(47, 155, 255, 0.3); border-color: #ffffff; }
+.btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
 .fh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .fh h2 { margin: 0; font-family: var(--fd); font-weight: 700; font-size: 28px; line-height: 1; color: #ffffff; }
 .fsec { display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-top: 1px solid var(--line); }
@@ -761,7 +767,8 @@ a { text-decoration: none; }
 .close { width: 44px; height: 44px; flex: none; border-radius: 10px; border: 1px solid var(--line); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
 
 /* Kad butiran */
-.card { position: absolute; z-index: 998; left: var(--gl); right: var(--gr); bottom: 0; max-height: 55%; overflow-y: auto; padding: 16px; border-radius: 16px 16px 0 0; background: var(--panel-a); border: 1px solid rgba(255, 255, 255, 0.2); border-bottom: 0; display: flex; flex-direction: column; gap: 12px; }
+.card { position: absolute; z-index: 998; left: var(--gl); right: var(--gr); bottom: 0; max-height: 55%; overflow-y: auto; padding: 16px; border-radius: 16px 16px 0 0; background: var(--glass); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.28); border-bottom: 0; display: flex; flex-direction: column; gap: 12px; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6); }
+.card .k, .card .ch p { color: #c9d8e1; }
 .card[hidden] { display: none; }
 .ch { display: flex; align-items: center; gap: 12px; }
 .badge { width: 48px; height: 48px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center; background: var(--c); color: #0a1925; font-family: var(--fd); font-weight: 700; font-size: 30px; line-height: 1; }
@@ -786,24 +793,35 @@ a { text-decoration: none; }
 .warn[hidden] { display: none; }
 .warn button { flex: none; min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #ffb938; background: transparent; color: #ffe3a8; font-size: 14px; cursor: pointer; }
 @media (min-width: 900px) {
-  :root { --psz: 40px; }
-  .top { flex-wrap: nowrap; padding-top: 12px; padding-bottom: 12px; }
-  .brand h1 { font-size: 38px; }
-  .brand p { display: block; font-size: 17px; }
+  :root { --psz: 40px; --glass: rgba(10, 25, 37, 0.5); }
+  .top { flex-wrap: nowrap; padding-top: 12px; padding-bottom: 12px; gap: 10px 16px; }
+  .brand { flex: none; }
+  .brand h1 { font-size: 34px; white-space: nowrap; }
+  .brand p { display: block; font-size: 17px; white-space: nowrap; }
+  @media (max-width: 1300px) { .brand p { display: none; } }
   .stats { order: 0; flex: 1 1 auto; }
-  .stat { padding: 8px 14px; gap: 10px; }
+  .stat { padding: 6px 12px; gap: 9px; }
   .stat .ic { width: 36px; height: 36px; font-size: 24px; }
   .stat .dot { width: 18px; height: 18px; }
   .stat .k { font-size: 14px; }
-  .stat .v { font-size: 32px; }
+  .stat .v { font-size: 28px; }
   .stat .s { display: block; font-size: 14px; }
   .tools { flex: 0 0 auto; margin-left: auto; }
   .search { flex: none; }
-  .search input { width: 220px; }
+  .search input { width: 170px; }
   .btn { padding: 0 14px; }
-  #btnFilter, #btnClose, #cclose { display: none; }
-  .filters { visibility: visible; transform: none; top: calc(var(--topH) + 16px); bottom: auto; left: var(--gl); width: 340px; max-height: calc(100% - var(--topH) - 90px); border: 1px solid var(--line); border-radius: 16px; }
-  .card { left: auto; right: var(--gr); top: calc(var(--topH) + 16px); bottom: auto; width: 400px; max-height: calc(100% - var(--topH) - 90px); padding: 22px; gap: 16px; border-radius: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+  #cclose { display: none; }
+  .card { left: var(--gl); right: auto; top: calc(var(--topH) + 16px); bottom: auto; width: 300px; max-height: calc(100% - var(--topH) - 90px); padding: 12px; gap: 8px; border-radius: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+  .card .badge { width: 34px; height: 34px; font-size: 21px; }
+  .card .ch { gap: 10px; }
+  .card .ch h2 { font-size: 20px; }
+  .card .ch p { font-size: 13px; }
+  .card .tiles { gap: 6px; }
+  .card .tile { padding: 6px 9px; gap: 2px; border-radius: 9px; }
+  .card .tile .k { font-size: 10.5px; }
+  .card .tile .v { font-size: 14px; }
+  .card .tile .v.big { font-size: 24px; }
+  .card .tile .v .d { width: 12px; height: 12px; }
   .ch h2 { font-size: 32px; }
   .badge { width: 60px; height: 60px; font-size: 38px; }
   .tile .v { font-size: 20px; }
@@ -827,10 +845,11 @@ a { text-decoration: none; }
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#9fb6c4" stroke-width="2.4"/><path d="M15.5 15.5L21 21" stroke="#9fb6c4" stroke-width="2.4" stroke-linecap="round"/></svg>
         <input id="cari" type="search" placeholder="Cari lokasi..." autocomplete="off">
       </label>
-      <button type="button" class="btn" id="btnDark" aria-pressed="false">Peta gelap</button>
-      <button type="button" class="btn" id="btnFilter" aria-expanded="false" aria-controls="filters">
-        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Penapis
+      <button type="button" class="btn" id="btnFilter" aria-expanded="false" aria-controls="filters" aria-haspopup="true">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Penapis<span class="fc" id="fcount" hidden></span>
+        <svg class="chev" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg>
       </button>
+      <button type="button" class="btn" id="btnDark" aria-pressed="false">Peta gelap</button>
     </div>
   </header>
 
@@ -968,7 +987,13 @@ var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenSt
     if (state.q && (p.nama + ' ' + p.id).toLowerCase().indexOf(state.q) === -1) return false;
     return true;
   }
+  function updateBadge() {
+    var n = 0;
+    ['jenis', 'kat', 'pem'].forEach(function (g) { Object.keys(state[g] || {}).forEach(function (k) { if (!state[g][k]) n++; }); });
+    var b = $('fcount'); b.textContent = n; b.hidden = !n;
+  }
   function refreshMarkers() {
+    updateBadge();
     group.clearLayers();
     LOKASI.forEach(function (p) {
       if (matches(p)) {
@@ -989,7 +1014,7 @@ var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenSt
     var b = visibleBounds();
     if (!b) return;
     var d = isDesktop();
-    var left = d ? 380 : 30, right = d ? (state.sel ? 440 : 40) : 30;
+    var left = d ? (state.sel ? 340 : 60) : 30, right = d ? 60 : 30;
     var bottom = d ? 40 : (state.sel ? sheetH() + 20 : 30);
     map.fitBounds(b, { paddingTopLeft: [left, 40], paddingBottomRight: [right, bottom], maxZoom: 16, animate: !!animate });
   }
@@ -1023,8 +1048,7 @@ var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenSt
     var p = find(state.sel);
     if (!p) { card.hidden = true; card.innerHTML = ''; setSheet(); return; }
     var k = KAT[p.kategori] || { c: '#cfe0ea' };
-    var q = p.lat.toFixed(6) + ',' + p.lng.toFixed(6);
-    card.hidden = false;
+        card.hidden = false;
     card.innerHTML =
       '<div class="ch"><span class="badge" style="--c:' + k.c + '">P</span><div class="tt"><h2>' + esc(p.nama) + '</h2><p>' + esc(p.id) + ' · Putrajaya</p></div>' +
       '<button type="button" class="close" id="cclose" aria-label="Tutup butiran"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>' +
@@ -1033,9 +1057,7 @@ var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenSt
       '<div class="tile"><span class="k">Kategori</span><span class="v"><span class="d" style="background:' + k.c + '"></span>' + esc(p.kategori) + '</span></div>' +
       '<div class="tile"><span class="k">Jenis TLK</span><span class="v">' + esc(p.jenis) + '</span></div>' +
       '<div class="tile"><span class="k">Pemilik</span>' + (p.pemilik ? '<span class="v">' + esc(p.pemilik) + '</span>' : '<span class="v dim">Belum diisi</span>') + '</div>' +
-      '<div class="tile wide"><span class="k">Koordinat</span><span class="v">' + p.lat.toFixed(6) + ', ' + p.lng.toFixed(6) + '</span></div></div>' +
-      '<div class="acts"><a class="a1" href="https://www.google.com/maps/search/?api=1&query=' + q + '" target="_blank" rel="noopener">Lihat di Google Maps</a>' +
-      '<a class="a2" href="https://www.google.com/maps/dir/?api=1&destination=' + q + '" target="_blank" rel="noopener">Ara ke sini</a></div>';
+      '<div class="tile wide"><span class="k">Koordinat</span><span class="v">' + p.lat.toFixed(6) + ', ' + p.lng.toFixed(6) + '</span></div></div>';
     setSheet();
   }
   function setSheet() {
@@ -1054,7 +1076,7 @@ var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenSt
     var size = map.getSize();
     var pt = map.latLngToContainerPoint([p.lat, p.lng]);
     var cx, cy;
-    if (isDesktop()) { cx = (380 + (size.x - 440)) / 2; cy = size.y / 2; }
+    if (isDesktop()) { cx = (340 + (size.x - 60)) / 2; cy = size.y / 2; }
     else { cx = size.x / 2; cy = (size.y - sheetH()) / 2; }
     map.panBy([pt.x - cx, pt.y - cy], { animate: true });
   }
@@ -1081,12 +1103,18 @@ var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenSt
     refreshMarkers();
     if (state.q) fit(true);
   });
-  $('btnFilter').addEventListener('click', function () {
-    var f = $('filters'), open = !f.classList.contains('open');
-    f.classList.toggle('open', open);
+  function setFilterOpen(open) {
+    $('filters').classList.toggle('open', open);
     $('btnFilter').setAttribute('aria-expanded', String(open));
+  }
+  $('btnFilter').addEventListener('click', function (e) { e.stopPropagation(); setFilterOpen(!$('filters').classList.contains('open')); });
+  $('filters').addEventListener('click', function (e) { e.stopPropagation(); });
+  $('btnClose').addEventListener('click', function () { setFilterOpen(false); $('btnFilter').focus(); });
+  document.addEventListener('click', function (e) {
+    if ($('filters').classList.contains('open') && !e.target.closest('#filters') && !e.target.closest('#btnFilter')) setFilterOpen(false);
   });
-  $('btnClose').addEventListener('click', function () { $('filters').classList.remove('open'); $('btnFilter').setAttribute('aria-expanded', 'false'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && $('filters').classList.contains('open')) { setFilterOpen(false); $('btnFilter').focus(); } });
+  map.on('mousedown touchstart', function () { if ($('filters').classList.contains('open')) setFilterOpen(false); });
   $('btnDark').addEventListener('click', function () {
     var on = !$('app').classList.contains('dark-tiles');
     $('app').classList.toggle('dark-tiles', on);
